@@ -9,9 +9,7 @@ endpoints:
   anthropic:
     apiKey: "${ANTHROPIC_API_KEY}"
     models:
-      default:
-        - claude-sonnet-4-20250514
-      fetch: false
+      - claude-sonnet-4-20250514
 
 fileConfig:
   endpoints:
@@ -21,9 +19,3 @@ fileConfig:
       totalSizeLimit: 50
       supportedMimeTypes:
         - "application/pdf"
-
-rag:
-  enabled: true
-  chunkSize: 1000
-  chunkOverlap: 150
-  topK: 5
