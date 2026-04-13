@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  librechat:
+    image: ghcr.io/danny-avila/librechat-dev:latest
+    container_name: librechat
+    ports:
+      - "3080:3080"
+    depends_on:
+      - mongodb
+      - rag_api
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./librechat.yaml:/app/librechat.yaml
+      - librechat_images:/app/client/public/images
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+
+  vectordb:
+    image: pgvector/pgvector:pg16
+    container_name: vectordb
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+
+  rag_api:
+    image: registry.librechat.ai/danny-avila/librechat-rag-api-dev:latest
+    container_name: rag_api
+    restart: unless-stopped
+    depends_on:
+      - vectordb
+    env_file:
+      - .env
+
+volumes:
+  mongodb_data:
+  pgvector_data:
+  librechat_images:

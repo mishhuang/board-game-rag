@@ -1,0 +1,29 @@
+version: 1.1.5
+
+cache: true
+
+interface:
+  appTitle: "Board Game Rules Assistant"
+
+endpoints:
+  anthropic:
+    apiKey: "${ANTHROPIC_API_KEY}"
+    models:
+      default:
+        - claude-sonnet-4-20250514
+      fetch: false
+
+fileConfig:
+  endpoints:
+    default:
+      fileLimit: 5
+      fileSizeLimit: 10
+      totalSizeLimit: 50
+      supportedMimeTypes:
+        - "application/pdf"
+
+rag:
+  enabled: true
+  chunkSize: 1000
+  chunkOverlap: 150
+  topK: 5
