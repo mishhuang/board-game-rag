@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   librechat:
     image: ghcr.io/danny-avila/librechat-dev:latest
