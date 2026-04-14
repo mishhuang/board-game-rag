@@ -73,9 +73,10 @@ Go to [http://localhost:3080](http://localhost:3080), create an account, and log
 board-game-rag/
 ├── docker-compose.yml          # Spins up LibreChat, RAG API, pgvector, MongoDB
 ├── librechat.yaml              # LibreChat configuration
+├── Makefile                    # Shortcuts for common docker compose commands
 ├── .env.example                # Environment variable template
-├── scripts/                    # Utility scripts (ingestion, etc.)
-├── prompts/                    # System prompt templates per game
+├── scripts/                    # Planned: bulk rulebook ingestion scripts
+├── prompts/                    # Planned: version-controlled system prompt templates per game
 └── README.md
 
 ## How It Works
