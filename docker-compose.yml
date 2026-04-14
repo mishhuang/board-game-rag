@@ -23,6 +23,7 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+
   vectordb:
     image: pgvector/pgvector:pg16
     container_name: vectordb
@@ -33,6 +34,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - pgvector_data:/var/lib/postgresql/data
+    networks:
+      default:
+        aliases:
+          - db
 
   rag_api:
     image: registry.librechat.ai/danny-avila/librechat-rag-api-dev:latest
