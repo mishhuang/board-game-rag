@@ -129,7 +129,6 @@ make clean        # Stop and remove volumes
 - **Custom PDF parser** — swap in PyMuPDF for better text extraction, especially for rulebooks with complex layouts and tables
 
 ### Cost & Infrastructure
-- **Fully local/open source mode** — replace the Claude API with a locally running open source LLM via Ollama (Llama 3, Mistral, etc.) so the entire stack runs with zero API costs
 - **Rulebook version management** — handle errata and updated editions without re-ingesting everything from scratch
 
 ### Features
@@ -142,3 +141,4 @@ make clean        # Stop and remove volumes
 - Images and diagrams in rulebooks are not currently extracted — text-only for v1
 - Embeddings are generated locally via Ollama so there is no per-token embedding cost
 - PDFs are chunked using a three-tier strategy: section-based → semantic → fixed-size fallback
+- **Fully local/open source mode** — replace the Claude API with a locally running open source LLM via Ollama. Mistral 7B was tested but lacks reliable tool-use for file search. Requires a model with stronger function calling support (e.g. Llama 3.1 8B or later).
