@@ -11,7 +11,7 @@ Each board game is configured as a separate Agent in LibreChat, so every game ge
 ## Tech Stack
 
 - **Frontend:** [LibreChat](https://github.com/danny-avila/LibreChat) — open source AI chat UI
-- **RAG Pipeline:** LibreChat RAG API (FastAPI + LangChain) with three-tier semantic chunking
+- **RAG Pipeline:** LibreChat RAG API (FastAPI + LangChain) with three-tier semantic chunking and PyMuPDF text extraction
 - **Vector Database:** PostgreSQL + pgvector
 - **Embeddings:** [nomic-embed-text](https://ollama.com/library/nomic-embed-text) via Ollama (local, zero cost)
 - **LLM:** Claude (Anthropic API)
@@ -121,7 +121,7 @@ make clean        # Stop and remove volumes
 
 ### Retrieval Quality
 - **Reranking** — add a reranker model as a second pass after vector search to improve relevance before sending chunks to the LLM
-- **Image and diagram extraction** — rulebooks contain setup diagrams and card layouts that the current text-only parser skips entirely
+- **Image and diagram extraction** — rulebooks contain setup diagrams and card layouts that are not yet extracted; PyMuPDF's `page.get_images()` provides the primitive, but a vision model is needed to describe diagram contents for RAG
 
 ### UI/UX
 - **Game selector landing page** — a proper home screen where you pick your game before the chat loads, rather than manually switching agents
@@ -142,3 +142,5 @@ make clean        # Stop and remove volumes
 - Embeddings are generated locally via Ollama so there is no per-token embedding cost
 - PDFs are chunked using a three-tier strategy: section-based → semantic → fixed-size fallback
 - **Fully local/open source mode** — replace the Claude API with a locally running open source LLM via Ollama. Mistral 7B was tested but lacks reliable tool-use for file search. Requires a model with stronger function calling support (e.g. Llama 3.1 8B or later).
+- PDF text extraction uses PyMuPDF for improved handling of complex layouts, tables, and fonts
+
