@@ -122,6 +122,7 @@ make clean        # Stop and remove volumes
 ### Retrieval Quality
 - **Reranking** — add a reranker model as a second pass after vector search to improve relevance before sending chunks to the LLM
 - **Image and diagram extraction** — rulebooks contain setup diagrams and card layouts that are not yet extracted; PyMuPDF's `page.get_images()` provides the primitive, but a vision model is needed to describe diagram contents for RAG
+- **Fully local/open source mode** — replace the Claude API with a locally running open source LLM via Ollama so the entire stack runs with zero API costs. Both Mistral 7B and Qwen3 8B were evaluated — tool calling works mechanically on Qwen3 8B but factual accuracy is insufficient for a rules assistant where wrong answers cause real problems mid-game. Requires a larger or more instruction-tuned model; a promising next candidate is Llama 3.1 8B Instruct.
 
 ### UI/UX
 - **Game selector landing page** — a proper home screen where you pick your game before the chat loads, rather than manually switching agents
@@ -141,6 +142,6 @@ make clean        # Stop and remove volumes
 - Images and diagrams in rulebooks are not currently extracted — text-only for v1
 - Embeddings are generated locally via Ollama so there is no per-token embedding cost
 - PDFs are chunked using a three-tier strategy: section-based → semantic → fixed-size fallback
-- **Fully local/open source mode** — replace the Claude API with a locally running open source LLM via Ollama. Mistral 7B was tested but lacks reliable tool-use for file search. Requires a model with stronger function calling support (e.g. Llama 3.1 8B or later).
+- Local LLM support is a work in progress — Qwen3 8B via Ollama successfully calls the RAG API but hallucinates rule details; Claude remains the recommended model for accurate answers
 - PDF text extraction uses PyMuPDF for improved handling of complex layouts, tables, and fonts
 
