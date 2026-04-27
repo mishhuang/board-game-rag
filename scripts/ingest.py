@@ -1,4 +1,23 @@
 #!/usr/bin/env python3
+"""
+Rulebook ingestion script for the Board Game RAG pipeline.
+
+Authenticates with LibreChat, generates a file_id, and embeds the PDF
+directly into the RAG API (pgvector). Useful for re-ingesting or bulk
+ingesting rulebooks without going through the LibreChat UI.
+
+Note: This script embeds files directly into the RAG API but does not
+register them with LibreChat's file management system. To use a file
+with an Agent's File Search, you still need to upload it through the
+Agent Builder UI. The file_id printed by this script can be used to
+verify the embedding exists via GET /ids on the RAG API.
+
+Usage:
+    LIBRECHAT_EMAIL=you@example.com LIBRECHAT_PASSWORD=yourpassword \\
+        py scripts/ingest.py --file rulebooks/catan.pdf --game "Catan"
+"""
+
+
 import argparse
 import os
 import sys
