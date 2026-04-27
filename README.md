@@ -81,7 +81,8 @@ board-game-rag/
 ├── Makefile                    # Shortcuts for common docker compose commands
 ├── .env.example                # Environment variable template
 ├── rag_api/                    # Forked RAG API with custom semantic chunking
-├── scripts/                    # Planned: bulk rulebook ingestion scripts
+├── scripts/                    # Ingestion scripts for bulk rulebook embedding
+│   └── ingest.py               # CLI tool to embed PDFs directly into the RAG pipeline
 ├── prompts/                    # Planned: version-controlled system prompt templates per game
 └── README.md
 
@@ -113,6 +114,21 @@ make logs-rag     # Follow RAG API logs
 make status       # Show container status
 make clean        # Stop and remove volumes
 ```
+
+
+## Ingestion Script
+
+To embed a rulebook PDF directly into the RAG pipeline without using the UI:
+
+```bash
+LIBRECHAT_EMAIL=you@example.com LIBRECHAT_PASSWORD=yourpassword \
+    py scripts/ingest.py --file rulebooks/catan.pdf --game "Catan"
+```
+
+This authenticates with LibreChat, generates a file ID, and embeds the PDF into pgvector using the three-tier chunking pipeline. The printed file ID can be used to verify the embedding via `GET http://localhost:8000/ids`.
+
+**Note:** Files embedded this way are not registered in LibreChat's file management system. To attach a file to an Agent's File Search, upload it through the Agent Builder UI as normal.
+
 
 ## Future Improvements
 
