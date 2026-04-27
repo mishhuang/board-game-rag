@@ -41,6 +41,8 @@ services:
       context: ./rag_api
       dockerfile: Dockerfile
     container_name: rag_api
+    ports:
+      - "8000:8000"
     restart: unless-stopped
     depends_on:
       - vectordb
