@@ -2,12 +2,13 @@
 import argparse
 import os
 import sys
+import uuid
 from pathlib import Path
 
 import requests
 
 
-LIBRECHAT_URL = "http://localhost:3080"
+LIBRECHAT_URL = "http://localhost:3080"  # used for auth only
 RAG_API_URL = "http://localhost:8000"
 
 
@@ -43,26 +44,6 @@ def authenticate(email: str, password: str) -> str:
         print(f"Error: login response missing 'token': {data}", file=sys.stderr)
         sys.exit(1)
     return token
-
-
-def upload_to_librechat(token: str, pdf_path: Path) -> str:
-    headers = {"Authorization": f"Bearer {token}"}
-    with open(pdf_path, "rb") as f:
-        resp = requests.post(
-            f"{LIBRECHAT_URL}/api/files/upload",
-            headers=headers,
-            files={"file": (pdf_path.name, f, "application/pdf")},
-            timeout=60,
-        )
-    if resp.status_code not in (200, 201):
-        print(f"Error: file upload failed ({resp.status_code}): {resp.text}", file=sys.stderr)
-        sys.exit(1)
-    data = resp.json()
-    file_id = data.get("file_id")
-    if not file_id:
-        print(f"Error: upload response missing 'file_id': {data}", file=sys.stderr)
-        sys.exit(1)
-    return file_id
 
 
 def trigger_embedding(token: str, file_id: str, pdf_path: Path, game: str) -> None:
@@ -104,10 +85,7 @@ def main():
     token = authenticate(email, password)
     print("Authentication successful.")
 
-    print(f"Uploading {pdf_path.name} to LibreChat...")
-    file_id = upload_to_librechat(token, pdf_path)
-    print(f"Upload complete. file_id: {file_id}")
-
+    file_id = str(uuid.uuid4())
     print("Triggering RAG embedding (this may take a few minutes)...")
     trigger_embedding(token, file_id, pdf_path, args.game)
 
