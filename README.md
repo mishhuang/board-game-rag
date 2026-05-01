@@ -14,13 +14,13 @@ Each board game is configured as a separate Agent in LibreChat, so every game ge
 - **RAG Pipeline:** LibreChat RAG API (FastAPI + LangChain) with three-tier semantic chunking and PyMuPDF text extraction
 - **Vector Database:** PostgreSQL + pgvector
 - **Embeddings:** [nomic-embed-text](https://ollama.com/library/nomic-embed-text) via Ollama (local, zero cost)
-- **LLM:** Claude (Anthropic API)
+- **LLM:** Claude, Gemini, Groq, or OpenAI (configurable) — Claude recommended for best accuracy
 - **Orchestration:** Docker Compose
 
 ## Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/Mac) or Docker + Docker Compose (Linux)
-- [Ollama](https://ollama.com/) installed and running locally
+- [Ollama](https://ollama.com/) installed and running locally (open the Ollama app before starting the stack — it runs in the system tray on Windows)
 - An [Anthropic API key](https://console.anthropic.com/)
 
 ## Getting Started
@@ -143,19 +143,18 @@ This authenticates with LibreChat, generates a file ID, and embeds the PDF into 
 ### UI/UX
 - **Game selector landing page** — a proper home screen where you pick your game before the chat loads, rather than manually switching agents
 - **Mobile-friendly layout** — optimized for mid-game lookups on your phone
-- **Custom PDF parser** — swap in PyMuPDF for better text extraction, especially for rulebooks with complex layouts and tables
 
 ### Cost & Infrastructure
 - **Rulebook version management** — handle errata and updated editions without re-ingesting everything from scratch
 
 ### Features
 - **Multi-game search** — query across all uploaded rulebooks at once (e.g. "which games have a worker placement mechanic?")
-- **Pre-ingestion CLI script** — bulk upload all rulebooks at once instead of doing it manually through the UI per game
 - **Offline mode** — fully air-gapped setup with no external API calls required
 
 ## Notes
 
-- Images and diagrams in rulebooks are not currently extracted — text-only for v1
+- Ollama must be running before starting the stack — open the Ollama app from your Start menu (Windows) or it runs automatically as a background service on Mac/Linux
+- Image and diagram extraction is available when `PDF_EXTRACT_IMAGES=true` and `GEMINI_API_KEY` is set — uses Gemini vision to describe diagrams and append descriptions to text chunks
 - Embeddings are generated locally via Ollama so there is no per-token embedding cost
 - PDFs are chunked using a three-tier strategy: section-based → semantic → fixed-size fallback
 - Local LLM support is a work in progress — Qwen3 8B via Ollama successfully calls the RAG API but hallucinates rule details; Claude remains the recommended model for accurate answers
